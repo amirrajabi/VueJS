@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>VueJS test</title>
+</head>
+<body>
+
+<div id="card">
+
+    <header>
+        {{ title | capitalize }}
+    </header>
+
+    <ul>
+        <li>Length: {{ totalLengthT }}</li>
+    </ul>
+
+    <ul>
+        <li><input v-model="showList" type="checkbox">
+            Show List
+        </li>
+        <li><input v-model="disabled" type="checkbox">
+            Dis
+        </li>
+        <li><input v-model="isRounded" type="checkbox">
+            Round
+        </li>
+        <li><input v-model="sizeToggle" type="checkbox">
+            Large
+        </li>
+        <li><input type="text" v-model="fontColor"></li>
+        <li><input type="range" v-model="range"></li>
+    </ul>
+
+    <div>
+        <!--v-model="addItem"-->
+        <input id="itemForm"
+               v-on:keypress.enter="addItem">
+        <!--v-bind:disabled="buttonDisabled"-->
+        <button v-bind:class="[sizeToggle ? 'large' : '', {'rounded': isRounded}]"
+                v-bind:disabled="disabled"
+                v-on:click="addItem"
+                v-bind:style="styles">
+            {{buttonText}}
+        </button>
+    </div>
+
+    <template v-if="items.length > 0">
+        <div v-html="content" v-show="disabled"></div>
+
+        <ul v-if="showList">
+            <li v-for="(item, index) in items">
+                <button v-on:click="deleteItem(index)">X</button>
+                <h2>{{ item.text | capitalize }}</h2>
+                <p>{{ item.text | capitalize }} weight is {{ item.weight }}</p>
+                <a href="">{{ item.text | undercase | url }}</a>
+            </li>
+        </ul>
+        <p v-else="!showList">Please check show list</p>
+    </template>
+
+
+    <hr>
+
+    <header>Car</header>
+    <form v-on:submit.prevent="addCar">
+        <button v-on:click="addCar">Add {{amount}} Car</button>
+        <input type="text" v-model="amount">
+    </form>
+    <p>You have {{carsTotal}} Car!</p>
+
+    <hr>
+
+    <div>
+        <input type="checkbox" id="check" v-model="checked">
+        <label for="check"> this box is {{ checked ? 'Checked' : 'Unchecked' }} </label>
+        <br>
+        <template v-for="car in cars">
+            <label>
+                <input type="radio" v-bind:value="car" v-model="choseCar">
+                {{car}}
+            </label>
+            <br>
+        </template>
+        <span>Favorite: {{choseCar}}</span>
+        <br>
+        <select v-model="selectBu" multiple>
+            <option v-for="bu in bus" v-bind:value="bu.value">
+                {{bu.name}}
+            </option>
+        </select>
+
+        <span>Selected: {{selectBu}}</span>
+
+        <hr>
+        <input v-model="single">
+        <p>{{single}}</p>
+
+        <hr>
+        <textarea v-model="message" placeholder="Add message"></textarea>
+        <p style="white-space: pre;">{{message}}</p>
+
+    </div>
+
+    <template v-for="car in cars">
+        <car-counter v-bind:name="bus.name"
+                     v-bind:initQuantity="bus.value"></car-counter>
+    </template>
+
+</div>
+
+
+<script type="text/x-template" id="car-counter">
+
+    <div>
+        <button v-on:click="inc">{{quantity}}</button>
+        {{name}}
+    </div>
+
+</script>
+
+<script src="https://cdn.jsdelivr.net/lodash/4.17.4/lodash.min.js"></script>
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<script src="assets/app.js"></script>
+
+</body>
+</html>
